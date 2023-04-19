@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Copy Text by Line</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 20px;
+		}
+		h2 {
+			margin-bottom: 10px;
+		}
+		textarea {
+			width: 100%;
+			padding: 10px;
+			box-sizing: border-box;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			resize: none;
+		}
+		button {
+			background-color: #4CAF50;
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		button:hover {
+			background-color: #3e8e41;
+		}
+		.output-line {
+			display: flex;
+			align-items: center;
+			margin-bottom: 5px;
+			padding: 5px;
+			background-color: #f2f2f2;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+		}
+		.output-message {
+			margin-left: 10px;
+			font-weight: bold;
+			color: green;
+		}
+		.output-line button {
+			background-color: #2196F3;
+			border: none;
+			color: white;
+			padding: 5px 10px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		.output-line button:hover {
+			background-color: #0b7dda;
+		}
+	</style>
+</head>
+<body>
+	<h2>Enter text below:</h2>
+	<form onsubmit="return false;">
+		<textarea id="input-text" rows="5" cols="50"></textarea><br><br>
+		<button onclick="processText()">Submit</button><br><br>
+	</form>
+
+	<h2>Output:</h2>
+	<div id="output-text"></div>
+
+	<script>
+		function processText() {
+			var inputText = document.getElementById("input-text").value;
+			var lines = inputText.split("\n");
+			var result = "";
+			for (var i = 0; i < lines.length; i++) {
+				var line = lines[i].trim();
+				if (line != "") {
+					result += "<div class='output-line'>" + line + " <button onclick='copyLine(" + i + ", this)'>Copy Line " + (i + 1) + "</button><span class='output-message'></span></div>";
+				}
+			}
+			document.getElementById("output-text").innerHTML = result;
+		}
+
+		function copyLine(lineIndex, button) {
+			var lines = document.getElementById("input-text").value.split("\n");
+			var line = lines[lineIndex].trim();
+			if (line != "") {
+				navigator.clipboard.writeText(line).then(function() {
+					var message = button.nextElementSibling;
+					message.innerHTML = "Copied!";
+					setTimeout(function() {
+						message.innerHTML = "";
+					}, 200000);
+				}).catch(function() {
+					alert("Failed to copy!");
+				});
+			}
+		}
+	</script>
+</body>
+</html>
